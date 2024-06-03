@@ -2,14 +2,12 @@ import os
 
 # Define the directory and file structure
 structure = {
-    "auth-tutorial": {
-        "config": ["passport.js"],
-        "models": ["User.js"],
-        "routes": ["auth.js", "protected.js"],
-        ".env": None,
-        "app.js": None,
-        "package.json": None
-    }
+    "config": ["passport.js"],
+    "models": ["User.js"],
+    "routes": ["auth.js", "protected.js"],
+    ".env": None,
+    "app.js": None,
+    "package.json": None
 }
 
 # Function to create the directory and file structure
@@ -20,7 +18,7 @@ def create_structure(base_path, structure):
             os.makedirs(path, exist_ok=True)
             create_structure(path, content)
         else:
-            os.makedirs(base_path, exist_ok=True)
+            os.makedirs(path, exist_ok=True)  # Corrected line
             if content:
                 for file in content:
                     open(os.path.join(path, file), 'a').close()
@@ -28,6 +26,6 @@ def create_structure(base_path, structure):
                 open(path, 'a').close()
 
 # Create the structure
-create_structure(".", structure)
+create_structure("..", structure)
 
 print("Project structure created successfully!")
