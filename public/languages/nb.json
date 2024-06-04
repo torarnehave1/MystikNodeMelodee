@@ -1,0 +1,8 @@
+{
+    "title": "Brukerregistrering",
+    "emailLabel": "E-post:",
+    "passwordLabel": "Passord:",
+    "confirmPasswordLabel": "Bekreft Passord:",
+    "securityMessage": "Ditt passord lagres ikke som klartekst. I stedet blir det transformert ved bruk av sterk krypteringsteknikk, noe som gjør det uleselig og sikrer at det lagres sikkert. Dette betyr at selv om noen får tilgang til de lagrede dataene, kan de ikke se ditt faktiske passord.",
+    "submitButton": "Registrer"
+}

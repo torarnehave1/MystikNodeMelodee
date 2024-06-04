@@ -1,0 +1,8 @@
+{
+    "title": "Kullanıcı Kaydı",
+    "emailLabel": "E-posta:",
+    "passwordLabel": "Şifre:",
+    "confirmPasswordLabel": "Şifreyi Onayla:",
+    "securityMessage": "Şifreniz düz metin olarak saklanmaz. Bunun yerine, güçlü şifreleme teknikleri kullanılarak dönüştürülür, bu da onu okunamaz hale getirir ve güvenli bir şekilde saklanmasını sağlar. Bu, saklanan verilere birinin erişmesi durumunda, gerçek şifrenizi göremeyeceği anlamına gelir.",
+    "submitButton": "Kaydol"
+}

@@ -1,0 +1,8 @@
+{
+    "title": "Registro de Usuario",
+    "emailLabel": "Correo Electrónico:",
+    "passwordLabel": "Contraseña:",
+    "confirmPasswordLabel": "Confirmar Contraseña:",
+    "submitButton": "Registrarse",
+    "securityMessage": "Su contraseña no se almacena como texto plano. En su lugar, se transforma utilizando técnicas de encriptación robustas, lo que la hace ilegible y garantiza que se almacene de forma segura. Esto significa que incluso si alguien accede a los datos almacenados, no podrá ver su contraseña real."
+}
