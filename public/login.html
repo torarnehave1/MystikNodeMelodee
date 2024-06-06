@@ -52,44 +52,59 @@
 
   <!-- Language Switching Script -->
   <script>
+    // Function to load the language file and update the page content
+    function loadLanguage(language) {
+        fetch(`/languages/${language}.json`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('title').innerText = data.loginTitle;
+                document.getElementById('usernameLabel').innerText = data.usernameLabel;
+                document.getElementById('passwordLabel').innerText = data.passwordLabel;
+                document.getElementById('submitButton').innerText = data.loginButton;
+            });
+    }
+
+    // Event listener for language selector
     document.getElementById('languageSelector').addEventListener('change', function() {
-      const selectedLanguage = this.value;
-      fetch(`/languages/${selectedLanguage}.json`)
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('title').innerText = data.loginTitle;
-          document.getElementById('usernameLabel').innerText = data.usernameLabel;
-          document.getElementById('passwordLabel').innerText = data.passwordLabel;
-          document.getElementById('submitButton').innerText = data.loginButton;
-        });
+        const selectedLanguage = this.value;
+        localStorage.setItem('preferredLanguage', selectedLanguage);
+        loadLanguage(selectedLanguage);
+    });
+
+    // Load the preferred language on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+        document.getElementById('languageSelector').value = preferredLanguage;
+        loadLanguage(preferredLanguage);
     });
 
     document.getElementById('loginForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
+        event.preventDefault();
 
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-      try {
-        const response = await fetch('http://localhost:5000/a/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ username, password })
-        });
+        try {
+            const response = await fetch('http://localhost:5000/a/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
 
-        if (!response.ok) {
-          throw new Error('Invalid username or password');
+            if (!response.ok) {
+                throw new Error('Invalid username or password');
+            }
+
+            const data = await response.json();
+            console.log('Token:', data.token);
+            // Store the token and redirect to a protected page
+        } catch (error) {
+            alert(error.message);
         }
-
-        const data = await response.json();
-        console.log('Token:', data.token);
-        // Store the token and redirect to a protected page
-      } catch (error) {
-        alert(error.message);
-      }
     });
-  </script>
+</script>
+
 </body>
 </html>
