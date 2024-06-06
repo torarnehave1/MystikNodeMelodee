@@ -5,40 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SlowYou.net</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        .hero-background {
+            background: url('hero.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
 </head>
-<body class="d-flex flex-column pt-5" style="background: url('hero.png') no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-
-    <div class="container" style="background-color: #FFCC99;">
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-            <div class="col-md-3 mb-2 mb-md-0">
-                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-                    <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-                </a>
-            </div>
+<body class="d-flex flex-column pt-5 hero-background">
     
-            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="../index.html" class="nav-link px-2 link-secondary" id="navHome">Home</a></li>
-                <li><a href="#" class="nav-link px-2" id="navFeatures">Features</a></li>
-                <li><a href="#" class="nav-link px-2" id="navPricing">Pricing</a></li>
-                <li><a href="#" class="nav-link px-2" id="navFAQs">FAQs</a></li>
-                <li><a href="#" class="nav-link px-2" id="navAbout">About</a></li>
-            </ul>
-    
-            <div class="col-md-3 text-end">
-                <a href="../login.html"><button type="button" class="btn btn-outline-primary me-2" id="loginButton">Login</button></a>
-                <button type="button" class="btn btn-primary" id="signupButton">Sign-up</button>
-            </div>
-        </header>
+    <div id="menu-container"></div> <!-- Placeholder for the menu -->
 
-        <div class="text-right my-2">
-            <select id="languageSelector" class="form-control w-25 d-inline" title="Select Language">
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="nb">Norsk</option>
-                <option value="tr">Türkçe</option>
-            </select>
-        </div>
-    </div>
     <section id="hero" class="mt-4">
         <div class="container">
             <h1 class="display-4 text-center mb-4" id="heroTitle">Effortless Being, Boundless Living.</h1>
@@ -59,7 +36,8 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
         // Function to load the language file and update the page content
@@ -81,19 +59,33 @@
                     document.getElementById('learnMoreButton').innerText = data.learnMoreButton;
                 });
         }
-    
-        // Event listener for language selector
-        document.getElementById('languageSelector').addEventListener('change', function() {
-            const selectedLanguage = this.value;
-            localStorage.setItem('preferredLanguage', selectedLanguage);
-            loadLanguage(selectedLanguage);
-        });
-    
-        // Load the preferred language on page load
-        document.addEventListener('DOMContentLoaded', () => {
+
+        // Function to initialize the language selector
+        function initializeLanguageSelector() {
+            document.getElementById('languageSelector').addEventListener('change', function() {
+                const selectedLanguage = this.value;
+                localStorage.setItem('preferredLanguage', selectedLanguage);
+                loadLanguage(selectedLanguage);
+            });
+
             const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
             document.getElementById('languageSelector').value = preferredLanguage;
             loadLanguage(preferredLanguage);
+        }
+    
+        // Function to load the menu
+        function loadMenu() {
+            fetch('./menu.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('menu-container').innerHTML = data;
+                    initializeLanguageSelector(); // Initialize the language selector after loading the menu
+                });
+        }
+    
+        // Load the menu and preferred language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMenu();
         });
     </script>
     

@@ -22,15 +22,8 @@
     </style>
 </head>
 <body>
+    <div id="menu-container"></div> <!-- Placeholder for the menu -->
     <div class="container">
-        <div class="text-right my-2">
-            <select id="languageSelector" class="form-control w-25 d-inline" title="Select Language">
-                <option value="en" data-flag="flag-icon-us">English</option>
-                <option value="es" data-flag="flag-icon-es">Español</option>
-                <option value="nb" data-flag="flag-icon-no">Norsk</option>
-                <option value="tr" data-flag="flag-icon-tr">Türkçe</option>
-            </select>
-        </div>
         <h2 class="text-center my-4" id="title">User Registration</h2>
         <form id="registrationForm" action="/a/register" method="post" class="form-container" onsubmit="return validatePassword()">
             <div class="form-group">
@@ -57,7 +50,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- Language Switching Script -->
+    <!-- Menu and Language Script -->
     <script>
         function loadLanguage(language) {
             fetch(`/languages/${language}.json`)
@@ -69,19 +62,43 @@
                     document.getElementById('confirmPasswordLabel').innerText = data.confirmPasswordLabel;
                     document.getElementById('securityMessage').innerText = data.securityMessage;
                     document.getElementById('submitButton').innerText = data.submitButton;
+                    // Update menu content
+                    document.getElementById('navHome').innerText = data.navHome;
+                    document.getElementById('navFeatures').innerText = data.navFeatures;
+                    document.getElementById('navPricing').innerText = data.navPricing;
+                    document.getElementById('navFAQs').innerText = data.navFAQs;
+                    document.getElementById('navAbout').innerText = data.navAbout;
+                    document.getElementById('loginButton').innerText = data.loginButton;
+                    document.getElementById('signupButton').innerText = data.signupButton;
                 });
         }
 
-        document.getElementById('languageSelector').addEventListener('change', function() {
-            const selectedLanguage = this.value;
-            localStorage.setItem('preferredLanguage', selectedLanguage);
-            loadLanguage(selectedLanguage);
-        });
+        // Function to initialize the language selector
+        function initializeLanguageSelector() {
+            document.getElementById('languageSelector').addEventListener('change', function() {
+                const selectedLanguage = this.value;
+                localStorage.setItem('preferredLanguage', selectedLanguage);
+                loadLanguage(selectedLanguage);
+            });
 
-        document.addEventListener('DOMContentLoaded', () => {
             const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
             document.getElementById('languageSelector').value = preferredLanguage;
             loadLanguage(preferredLanguage);
+        }
+
+        // Function to load the menu
+        function loadMenu() {
+            fetch('./menu.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('menu-container').innerHTML = data;
+                    initializeLanguageSelector(); // Initialize the language selector after loading the menu
+                });
+        }
+
+        // Load the menu and preferred language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMenu();
         });
 
         function validatePassword() {

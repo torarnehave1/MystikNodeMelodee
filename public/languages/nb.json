@@ -19,5 +19,19 @@
     "submitButton": "Registrer",
     "loginTitle": "Logg Inn",
   "usernameLabel": "Brukernavn:",
-  "loginButton": "Logg Inn"
+  "loginButton": "Logg Inn",
+
+  
+    "navHome": "Hjem",
+    "navFeatures": "Tjenester",
+    "navPricing": "Priser",
+    "navFAQs": "FAQ",
+    "navAbout": "Om",
+    "signupButton": "Registrer deg",
+    "heroTitle": "Uanstrengt Væren, Ubegrenset Liv.",
+    "heroSubtitle": "Reisen Innover",
+    "heroText1": "\"Uanstrengt Væren, Ubegrenset Liv\" er mer enn et prinsipp; det er en livsstil. Det inviterer deg til å gå inn i en verden der hver handling er fylt med mening, og hvert øyeblikk er en mulighet for vekst og glede. Det kaller deg til et liv der du ikke lenger er en tilskuer, men en livlig deltaker i skapelsens dans.",
+    "heroText2": "Denne filosofien ber deg ikke om å endre hvem du er, men om å bli mer dyptgående det du virkelig er - et vesen av lys, kjærlighet og uendelig potensial. Når du blar gjennom denne nettsiden og ditt liv, husk at veien til en grenseløs eksistens ligger i den uanstrengte enkelheten av å være tro mot din natur. La denne kunnskapen veilede deg når du navigerer verdens kompleksiteter med nåde og verdighet, og omfavner den ubegrensede gleden av bare å være.",
+    "learnMoreButton": "Lær mer"
 }
+

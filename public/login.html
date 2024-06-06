@@ -22,15 +22,8 @@
   </style>
 </head>
 <body>
+  <div id="menu-container"></div> <!-- Placeholder for the menu -->
   <div class="container">
-    <div class="text-right my-2">
-      <select id="languageSelector" class="form-control w-25 d-inline" title="Select Language">
-        <option value="en" data-flag="flag-icon-us">English</option>
-        <option value="es" data-flag="flag-icon-es">Español</option>
-        <option value="nb" data-flag="flag-icon-no">Norsk</option>
-        <option value="tr" data-flag="flag-icon-tr">Türkçe</option>
-      </select>
-    </div>
     <h2 class="text-center my-4" id="title">Login</h2>
     <form id="loginForm" class="form-container">
       <div class="form-group">
@@ -50,9 +43,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <!-- Language Switching Script -->
+  <!-- Menu and Language Script -->
   <script>
-    // Function to load the language file and update the page content
     function loadLanguage(language) {
         fetch(`/languages/${language}.json`)
             .then(response => response.json())
@@ -64,18 +56,43 @@
             });
     }
 
-    // Event listener for language selector
-    document.getElementById('languageSelector').addEventListener('change', function() {
-        const selectedLanguage = this.value;
-        localStorage.setItem('preferredLanguage', selectedLanguage);
-        loadLanguage(selectedLanguage);
-    });
+    function initializeLanguageSelector() {
+        document.getElementById('languageSelector').addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            localStorage.setItem('preferredLanguage', selectedLanguage);
+            loadLanguage(selectedLanguage);
+        });
 
-    // Load the preferred language on page load
-    document.addEventListener('DOMContentLoaded', () => {
         const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
         document.getElementById('languageSelector').value = preferredLanguage;
         loadLanguage(preferredLanguage);
+    }
+
+    function loadMenu() {
+        fetch('./menu.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('menu-container').innerHTML = data;
+                initializeLanguageSelector();
+                checkAuthStatus();
+            });
+    }
+
+    function checkAuthStatus() {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            document.getElementById('auth-buttons').classList.add('d-none');
+            document.getElementById('logout-button').classList.remove('d-none');
+        }
+
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            localStorage.removeItem('jwtToken');
+            location.reload();
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadMenu();
     });
 
     document.getElementById('loginForm').addEventListener('submit', async (event) => {
@@ -99,12 +116,16 @@
 
             const data = await response.json();
             console.log('Token:', data.token);
-            // Store the token and redirect to a protected page
+
+            // Store the token
+            localStorage.setItem('jwtToken', data.token);
+
+            // Redirect to index.html
+            window.location.href = data.redirectUrl;
         } catch (error) {
             alert(error.message);
         }
     });
-</script>
-
+  </script>
 </body>
 </html>
