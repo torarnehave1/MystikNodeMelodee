@@ -26,9 +26,64 @@
             <li><a href="#" class="nav-link px-2" id="navAbout">About</a></li>
         </ul>
         
-        <div class="text-end">
+        <div class="text-end" id="auth-buttons">
             <a href="../login.html"><button type="button" class="btn btn-outline-primary me-2" id="loginButton">Login</button></a>
             <a href="../reg.html"><button type="button" class="btn btn-primary" id="signupButton">Sign-up</button></a>
         </div>
+        <div class="text-end d-none" id="logout-button">
+            <button type="button" class="btn btn-primary" id="logoutButton">Logout</button>
+        </div>
     </header>
 </div>
+
+<script>
+    function loadLanguage(language) {
+        fetch(`/languages/${language}.json`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('navHome').innerText = data.navHome;
+                document.getElementById('navFeatures').innerText = data.navFeatures;
+                document.getElementById('navPricing').innerText = data.navPricing;
+                document.getElementById('navFAQs').innerText = data.navFAQs;
+                document.getElementById('navAbout').innerText = data.navAbout;
+                document.getElementById('loginButton').innerText = data.loginButton;
+                document.getElementById('signupButton').innerText = data.signupButton;
+                document.getElementById('titlelanguage').innerText = data.titlelanguage;
+            });
+    }
+
+    function initializeLanguageSelector() {
+        document.getElementById('languageSelector').addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            localStorage.setItem('preferredLanguage', selectedLanguage);
+            loadLanguage(selectedLanguage);
+        });
+
+        const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+        document.getElementById('languageSelector').value = preferredLanguage;
+        loadLanguage(preferredLanguage);
+    }
+
+    function checkAuthStatus() {
+        const token = localStorage.getItem('jwtToken');
+        console.log(token);
+
+        if (token) {
+            document.getElementById('auth-buttons').classList.add('d-none');
+            document.getElementById('logout-button').classList.remove('d-none');
+        } else {
+            document.getElementById('auth-buttons').classList.remove('d-none');
+            document.getElementById('logout-button').classList.add('d-none');
+        }
+
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            localStorage.removeItem('jwtToken');
+            location.reload();
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeLanguageSelector();
+        checkAuthStatus();
+    });
+</script>
