@@ -3,6 +3,10 @@
     "emailLabel": "E-posta:",
     "passwordLabel": "Şifre:",
     "confirmPasswordLabel": "Şifreyi Onayla:",
-    "securityMessage": "Şifreniz düz metin olarak saklanmaz. Bunun yerine, güçlü şifreleme teknikleri kullanılarak dönüştürülür, bu da onu okunamaz hale getirir ve güvenli bir şekilde saklanmasını sağlar. Bu, saklanan verilere birinin erişmesi durumunda, gerçek şifrenizi göremeyeceği anlamına gelir.",
-    "submitButton": "Kaydol"
-}
+    "securityMessage": "Şifreniz düz metin olarak saklanmaz. Bunun yerine, güçlü şifreleme teknikleri kullanılarak dönüştürülür, okunamaz hale getirilir ve güvenli bir şekilde saklanması sağlanır. Bu, birisi saklanan verilere erişse bile, gerçek şifrenizi göremeyeceği anlamına gelir.",
+    "submitButton": "Kaydol",
+    "loginTitle": "Giriş Yap",
+    "usernameLabel": "Kullanıcı Adı:",
+    "loginButton": "Giriş Yap"
+  }
+  

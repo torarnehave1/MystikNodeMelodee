@@ -1,8 +1,23 @@
 {
+    "email": {
+        "verification": {
+            "subject": "Bekreft din e-postadresse",
+            "body": "Hei, \n\nTakk for at du registrerte deg hos oss. Vennligst klikk på lenken nedenfor for å bekrefte din e-postadresse: \n\n{verificationLink} \n\nHvis du ikke har bedt om denne e-posten, kan du trygt ignorere den. \n\nVennlig hilsen, \nDitt Team"
+        },
+        "welcome": {
+            "subject": "Velkommen til vår tjeneste",
+            "body": "Hei, \n\nVi er glade for å ha deg med oss. La oss komme i gang! \n\nVennlig hilsen, \nDitt Team"
+        }
+       
+    },
+
     "title": "Brukerregistrering",
     "emailLabel": "E-post:",
     "passwordLabel": "Passord:",
     "confirmPasswordLabel": "Bekreft Passord:",
     "securityMessage": "Ditt passord lagres ikke som klartekst. I stedet blir det transformert ved bruk av sterk krypteringsteknikk, noe som gjør det uleselig og sikrer at det lagres sikkert. Dette betyr at selv om noen får tilgang til de lagrede dataene, kan de ikke se ditt faktiske passord.",
-    "submitButton": "Registrer"
+    "submitButton": "Registrer",
+    "loginTitle": "Logg Inn",
+  "usernameLabel": "Brukernavn:",
+  "loginButton": "Logg Inn"
 }

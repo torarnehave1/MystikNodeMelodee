@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { genSalt, hash, compare } from 'bcrypt';
+import { compare } from 'bcrypt';
 
 const userSchema = new Schema({
   username: { 
@@ -15,18 +15,22 @@ const userSchema = new Schema({
     },
   },
   password: { type: String, required: true },
-  createdAt: {
+  emailVerificationToken: { type: String, required: true },
+  emailVerificationTokenExpires: {
     type: Date,
     required: true,
-    default: Date.now
+    default: () => Date.now() + 3600000 // 1 hour from now
   },
-});
-
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  const salt = await genSalt(10);
-  this.password = await hash(this.password, salt);
-  next();
+  createdAt: { 
+    type: Date, 
+    required: true, 
+    default: Date.now 
+  },
+  isVerified: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
 });
 
 userSchema.methods.comparePassword = function(candidatePassword) {

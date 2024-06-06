@@ -2,6 +2,7 @@ import express from 'express';
 import { connect } from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user_routes.js'; // Import the user routes
+import emailRoutes from './routes/routes_email.js';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Routes
 app.use('/a', userRoutes);
+app.use('/e',emailRoutes);
 
 // Start the server
 const port = process.env.PORT || 5000;

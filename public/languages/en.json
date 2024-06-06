@@ -3,6 +3,10 @@
     "emailLabel": "Email:",
     "passwordLabel": "Password:",
     "confirmPasswordLabel": "Confirm Password:",
+    "securityMessage": "Your password is not stored as plain text. Instead, it is transformed using strong encryption techniques, making it unreadable and ensuring it is stored securely. This means that even if someone gains access to the stored data, they cannot see your actual password.",
     "submitButton": "Register",
-    "securityMessage": "Your password is not stored as plain text. Instead, it is transformed using strong encryption techniques, making it unreadable and ensuring it is stored securely. This means that even if someone gains access to the stored data, they cannot see your actual password."
-}
+    "loginTitle": "Login",
+    "usernameLabel": "Username:",
+    "loginButton": "Login"
+  }
+  
