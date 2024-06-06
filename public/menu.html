@@ -53,6 +53,7 @@
     }
 
     function initializeLanguageSelector() {
+        console.log("Initializing language selector");
         document.getElementById('languageSelector').addEventListener('change', function() {
             const selectedLanguage = this.value;
             localStorage.setItem('preferredLanguage', selectedLanguage);
@@ -64,10 +65,16 @@
         loadLanguage(preferredLanguage);
     }
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
     function checkAuthStatus() {
-        const token = localStorage.getItem('jwtToken');
-        console.log('dfdasfad');  // This should log to console
-        console.log(token);  // This should log the token value or null
+        console.log("Checking auth status");
+        const token = getCookie('jwtToken');
+        console.log('Token found:', token);
 
         if (token) {
             document.getElementById('auth-buttons').classList.add('d-none');
@@ -78,13 +85,16 @@
         }
 
         document.getElementById('logoutButton').addEventListener('click', () => {
-            localStorage.removeItem('jwtToken');
+            document.cookie = 'jwtToken=; Max-Age=0'; // Clear the cookie
             location.reload();
         });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOM fully loaded and parsed");
         initializeLanguageSelector();
         checkAuthStatus();
+        console.log("Checking auth status");
     });
 </script>
+
