@@ -31,7 +31,6 @@
                 <option value="tr" data-flag="flag-icon-tr">Türkçe</option>
             </select>
         </div>
-        </div>
         <h2 class="text-center my-4" id="title">User Registration</h2>
         <form id="registrationForm" action="/a/register" method="post" class="form-container" onsubmit="return validatePassword()">
             <div class="form-group">
@@ -60,9 +59,8 @@
 
     <!-- Language Switching Script -->
     <script>
-        document.getElementById('languageSelector').addEventListener('change', function() {
-            const selectedLanguage = this.value;
-            fetch(`/languages/${selectedLanguage}.json`)
+        function loadLanguage(language) {
+            fetch(`/languages/${language}.json`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('title').innerText = data.title;
@@ -72,6 +70,18 @@
                     document.getElementById('securityMessage').innerText = data.securityMessage;
                     document.getElementById('submitButton').innerText = data.submitButton;
                 });
+        }
+
+        document.getElementById('languageSelector').addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            localStorage.setItem('preferredLanguage', selectedLanguage);
+            loadLanguage(selectedLanguage);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+            document.getElementById('languageSelector').value = preferredLanguage;
+            loadLanguage(preferredLanguage);
         });
 
         function validatePassword() {
