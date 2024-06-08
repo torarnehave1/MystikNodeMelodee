@@ -19,13 +19,23 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .message.error {
+            color: red;
+        }
+        .message.success {
+            color: green;
+        }
     </style>
 </head>
 <body>
     <div id="menu-container"></div> <!-- Placeholder for the menu -->
     <div class="container">
         <h2 class="text-center my-4" id="title">User Registration</h2>
-        <form id="registrationForm" action="/a/register" method="post" class="form-container" onsubmit="return validatePassword()">
+        <form id="registrationForm" action="/a/register" method="post" class="form-container" onsubmit="event.preventDefault(); registerUser();">
+            <div class="form-group">
+                <label for="fullName" id="fullNameLabel">Full Name:</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" required>
+            </div>
             <div class="form-group">
                 <label for="username" id="emailLabel">Email:</label>
                 <input type="email" class="form-control" id="username" name="username" required>
@@ -42,7 +52,9 @@
                 Your password is not stored as plain text. Instead, it is transformed using strong encryption techniques, making it unreadable and ensuring it is stored securely. This means that even if someone gains access to the stored data, they cannot see your actual password.
             </div>
             <button type="submit" class="btn btn-primary btn-block" id="submitButton">Register</button>
+            <div id="message" class="message"></div>
         </form>
+        
     </div>
 
     <!-- Bootstrap JS and dependencies -->
@@ -57,23 +69,15 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('title').innerText = data.title;
+                    document.getElementById('fullNameLabel').innerText = data.fullNameLabel;
                     document.getElementById('emailLabel').innerText = data.emailLabel;
                     document.getElementById('passwordLabel').innerText = data.passwordLabel;
                     document.getElementById('confirmPasswordLabel').innerText = data.confirmPasswordLabel;
                     document.getElementById('securityMessage').innerText = data.securityMessage;
                     document.getElementById('submitButton').innerText = data.submitButton;
-                    // Update menu content
-                    document.getElementById('navHome').innerText = data.navHome;
-                    document.getElementById('navFeatures').innerText = data.navFeatures;
-                    document.getElementById('navPricing').innerText = data.navPricing;
-                    document.getElementById('navFAQs').innerText = data.navFAQs;
-                    document.getElementById('navAbout').innerText = data.navAbout;
-                    document.getElementById('loginButton').innerText = data.loginButton;
-                    document.getElementById('signupButton').innerText = data.signupButton;
                 });
         }
 
-        // Function to initialize the language selector
         function initializeLanguageSelector() {
             document.getElementById('languageSelector').addEventListener('change', function() {
                 const selectedLanguage = this.value;
@@ -86,17 +90,15 @@
             loadLanguage(preferredLanguage);
         }
 
-        // Function to load the menu
         function loadMenu() {
             fetch('./menu.html')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('menu-container').innerHTML = data;
-                    initializeLanguageSelector(); // Initialize the language selector after loading the menu
+                    initializeLanguageSelector();
                 });
         }
 
-        // Load the menu and preferred language on page load
         document.addEventListener('DOMContentLoaded', () => {
             loadMenu();
         });
@@ -109,6 +111,47 @@
                 return false;
             }
             return true;
+        }
+
+        async function registerUser() {
+            if (!validatePassword()) return;
+
+            const form = document.getElementById('registrationForm');
+            const formData = new FormData(form);
+            const messageDiv = document.getElementById('message');
+
+            try {
+                const response = await fetch('http://localhost:5000/a/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fullName: formData.get('fullName'),
+                        username: formData.get('username'),
+                        password: formData.get('password')
+                    })
+                });
+
+                const responseData = await response.json(); // Parse JSON response
+
+                messageDiv.textContent = responseData.message;
+
+                if (response.ok) {
+                    messageDiv.classList.remove('error');
+                    messageDiv.classList.add('success');
+                    // Optionally, you can redirect the user to another page upon successful registration
+                    // window.location.href = '/success.html';
+                } else {
+                    messageDiv.classList.add('error');
+                    messageDiv.classList.remove('success');
+                }
+            } catch (err) {
+                console.error('Error occurred:', err);
+                messageDiv.textContent = 'An error occurred while registering.';
+                messageDiv.classList.add('error');
+                messageDiv.classList.remove('success');
+            }
         }
     </script>
 </body>

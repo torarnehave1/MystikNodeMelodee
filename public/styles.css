@@ -1,0 +1,4 @@
+body.hero-background {
+    background: url('hero.png') no-repeat center center fixed;
+    background-size: cover;
+}

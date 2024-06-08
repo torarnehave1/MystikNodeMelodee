@@ -1,5 +1,5 @@
 <!-- menu.html -->
-<div class="container-fluid" style="background-color: #FFCC99;">
+<div class="container-fluid" style="background-color: #e6dcd3;">
     <header class="d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 border-bottom">
         <div class="d-flex align-items-center">
             <div class="me-4">
@@ -7,14 +7,18 @@
                     <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
                 </a>
             </div>
+
             <div class="text-left my-2">
-                <span class="display-8 fw-bold" id="titlelanguage">Language:</span>
-                <select id="languageSelector" class="form-control w-50 d-inline" title="Select Language">
+                <span class="display-8 fw-bold" id="titlelanguage"></span>
+            </div>
+            <div class="text-left my-2">
+                
+                <select id="languageSelector" class="form-control w-60 d-inline" title="Select Language">
                     <option value="en">English</option>
-                    <option value="es">Español</option>
                     <option value="nb">Norsk</option>
-                    <option value="tr">Türkçe</option>
                 </select>
+                    
+                
             </div>
         </div>
         
@@ -30,71 +34,10 @@
             <a href="../login.html"><button type="button" class="btn btn-outline-primary me-2" id="loginButton">Login</button></a>
             <a href="../reg.html"><button type="button" class="btn btn-primary" id="signupButton">Sign-up</button></a>
         </div>
-        <div class="text-end d-none" id="logout-button">
+
+        <div class="text-end d-none" id="logout-buttons">
             <button type="button" class="btn btn-primary" id="logoutButton">Logout</button>
+            <a href="../dashboard.html"> <button type="button" class="btn btn-primary" id="dashboard">Dashboard</button></a>
         </div>
     </header>
 </div>
-
-<script>
-    function loadLanguage(language) {
-        fetch(`/languages/${language}.json`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('navHome').innerText = data.navHome;
-                document.getElementById('navFeatures').innerText = data.navFeatures;
-                document.getElementById('navPricing').innerText = data.navPricing;
-                document.getElementById('navFAQs').innerText = data.navFAQs;
-                document.getElementById('navAbout').innerText = data.navAbout;
-                document.getElementById('loginButton').innerText = data.loginButton;
-                document.getElementById('signupButton').innerText = data.signupButton;
-                document.getElementById('titlelanguage').innerText = data.titlelanguage;
-            });
-    }
-
-    function initializeLanguageSelector() {
-        console.log("Initializing language selector");
-        document.getElementById('languageSelector').addEventListener('change', function() {
-            const selectedLanguage = this.value;
-            localStorage.setItem('preferredLanguage', selectedLanguage);
-            loadLanguage(selectedLanguage);
-        });
-
-        const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
-        document.getElementById('languageSelector').value = preferredLanguage;
-        loadLanguage(preferredLanguage);
-    }
-
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    }
-
-    function checkAuthStatus() {
-        console.log("Checking auth status");
-        const token = getCookie('jwtToken');
-        console.log('Token found:', token);
-
-        if (token) {
-            document.getElementById('auth-buttons').classList.add('d-none');
-            document.getElementById('logout-button').classList.remove('d-none');
-        } else {
-            document.getElementById('auth-buttons').classList.remove('d-none');
-            document.getElementById('logout-button').classList.add('d-none');
-        }
-
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            document.cookie = 'jwtToken=; Max-Age=0'; // Clear the cookie
-            location.reload();
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log("DOM fully loaded and parsed");
-        initializeLanguageSelector();
-        checkAuthStatus();
-        console.log("Checking auth status");
-    });
-</script>
-

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlowYou Dashboard</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('hero.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #1111114d;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            border: #4b0909;
+            border-width: 40px;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        .profile-card {
+            padding: 20px;
+            background: #f9f9f9bb;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .profile-card img {
+            border-radius: 50%;
+        }
+        .profile-card h2 {
+            margin-top: 15px;
+        }
+        .metrics {
+            display: flex;
+            justify-content: space-between;
+        }
+        .metric-card {
+            background: #f1f1f1;
+            padding: 20px;
+            border-radius: 10px;
+            width: 23%;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .recent-activity {
+            margin-top: 20px;
+        }
+        .activity-item {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <a href="../index.html">Home</a>
+        <a href="#profile">Profile</a>
+        <a href="#settings">Settings</a>
+        <a href="#logout">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="profile-card text-center">
+            <img src="https://via.placeholder.com/100" alt="User Avatar">
+            <h2>Jane Doe</h2>
+            <p>jane.doe@example.com</p>
+        </div>
+
+        <div class="metrics mt-4">
+            <div class="metric-card">
+                <h3>Posts</h3>
+                <p>120</p>
+            </div>
+            <div class="metric-card">
+                <h3>Followers</h3>
+                <p>300</p>
+            </div>
+            <div class="metric-card">
+                <h3>Following</h3>
+                <p>180</p>
+            </div>
+            <div class="metric-card">
+                <h3>Likes</h3>
+                <p>950</p>
+            </div>
+        </div>
+
+        <div class="recent-activity mt-4">
+            <h3>Recent Activity</h3>
+            <div class="activity-item">
+                <p><strong>Jane Doe</strong> liked a post.</p>
+                <small>5 minutes ago</small>
+            </div>
+            <div class="activity-item">
+                <p><strong>Jane Doe</strong> followed <strong>John Smith</strong>.</p>
+                <small>10 minutes ago</small>
+            </div>
+            <div class="activity-item">
+                <p><strong>Jane Doe</strong> commented on a post.</p>
+                <small>20 minutes ago</small>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

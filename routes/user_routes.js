@@ -7,9 +7,14 @@ import emailTemplates from '../public/languages/nb.json' assert { type: 'json' }
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+
+dotenv.config()
+
 
 const router = express.Router();
-const JWT_SECRET = 'your_jwt_secret_key'; // Replace with your secret key
+const JWT_SECRET = process.env.JWT_SECRET; // Replace with your secret key
 
 async function createUser(userData) {
     const user = new User(userData);
@@ -32,7 +37,9 @@ router.get('/register2', async (req, res) => {
         emailVerificationToken: token,
         emailVerificationTokenExpires: Date.now() + 3600000,
     });
+
     res.send('User registration completed');
+
 });
 
 router.post('/registerbak', async (req, res) => {
@@ -64,14 +71,16 @@ router.post('/registerbak', async (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
+  const { fullName, username, password } = req.body;
+  console.log(req.body);
+
   const emailVerificationToken = crypto.randomBytes(20).toString('hex');
   const emailVerificationTokenExpires = Date.now() + 3600000;
 
   try {
       const existingUser = await User.findOne({ username });
       if (existingUser) {
-          return res.status(400).json({ message: 'A user with this email already exists.' });
+          return res.status(400).send({ message: 'A user with this email already exists.' });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -88,7 +97,8 @@ router.post('/register', async (req, res) => {
       }
 
       const user = new User({
-          username,
+          fullName: fullName,
+        username: username,
           password: hashedPassword,
           emailVerificationToken,
           emailVerificationTokenExpires
@@ -100,8 +110,8 @@ router.post('/register', async (req, res) => {
       const transporter = nodemailer.createTransport({
           service: 'Gmail',
           auth: {
-              user: 'slowyou.net@gmail.com',
-              pass: 'thuo hsxf fpco xgxt',
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD,
           },
       });
 
@@ -119,11 +129,13 @@ router.post('/register', async (req, res) => {
           console.error('Error sending email:', mailError);
       }
 
-      res.status(201).json({ message: 'User registered successfully. Verification email sent.' });
+      res.status(201).send({ message: `User registered successfully. Verification email sent to:${username}`});
   } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'An error occurred while registering the user.' });
+      res.status(500).send({ message: 'An error occurred while registering the user.' });
   }
+
+
 });
 
 
@@ -191,12 +203,12 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-
+       
         // Set the token as a cookie with SameSite attribute
         res.cookie('jwtToken', token, {
-            httpOnly: true,
-            sameSite: 'None', // or 'Lax' or 'Strict', based on your needs
-            secure: true // make sure to use HTTPS
+            httpOnly: false,
+            sameSite: 'Strict', // or 'Lax' or 'Strict', based on your needs
+            secure: false // make sure to use HTTPS
         });
 
         // Send a redirect response
@@ -207,5 +219,107 @@ router.post('/login', async (req, res) => {
     }
 });
   
-  
+
+router.get('/forgot', async (req, res) => {
+    const { email } = req.query;
+
+    try {
+        // Find the user by email
+        const user = await User.findOne({ username :email });
+        if (!user) {
+            return res.status(400).send('User with this email does not exist.');
+        }
+
+        // Check if the user's email is verified
+        if (!user.isVerified) {
+            return res.status(400).send('Email is not verified.');
+        }
+
+        // Generate a password reset token
+        const token = crypto.randomBytes(20).toString('hex');
+
+        // Associate the token with the user in your database
+        user.emailVerificationToken = token;
+        await user.save({ validateBeforeSave: false });
+
+        // Send an email to the user with the password reset link
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USERNAME,
+            to: user.username,
+            subject: 'Password Reset',
+            text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\nhttp://localhost:5000/a/reset-password/${token}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n`,
+        };
+
+        transporter.sendMail(mailOptions, (err, response) => {
+            if (err) {
+                console.error('There was an error sending the recovery email:', err);
+                res.status(500).send('An error occurred while sending the recovery email.');
+            } else {
+                console.log('Recovery email sent successfully');
+                res.status(200).send('Recovery email sent to you email, please check your inbox or spam folder. The recovery email is sent from slowyou.net@gmail.com');
+            }
+        });
+    } catch (error) {
+        console.error('An error occurred while processing the request:', error);
+        res.status(500).send('An error occurred while processing your request.');
+    }
+
+
+});
+
+router.get('/reset-password/:token', async (req, res) => {
+    try {
+        console.log(req.params.token);
+        const user = await User.findOne({ emailVerificationToken: req.params.token });
+      
+        
+        if (!user) {
+            return res.status(400).send('Password reset token is invalid or has expired.');
+        }
+
+        // Render reset password view
+        res.render('reset', { token: req.params.token });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
+
+
+
+router.post('/save-new-password', async (req, res) => {
+    const { token, password } = req.body;
+
+    try {
+        const user = await User.findOne({ emailVerificationToken: token });
+
+
+        if (!user) {
+            return res.status(400).send('Password reset token is invalid or has expired.');
+        }
+
+        // Hash the new password and save it to the user
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.send('Your password has been updated.');
+        //res.redirect('../login.html',);  
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
 export default router;
